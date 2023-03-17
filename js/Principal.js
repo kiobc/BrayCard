@@ -1,4 +1,5 @@
-import ArrastraCartas from '../js/ArrastraCartas.js';
+
+import CartaJugador from './CartaJugador.js';
 export default class Principal extends Phaser.Scene{
     constructor(){
         super('Principal');
@@ -22,13 +23,14 @@ export default class Principal extends Phaser.Scene{
         this.load.bitmapFont('pressstart', 'assets/pressstart.png', 'assets/pressstart.fnt');
       }
       create(){
-        this.player= new ArrastraCartas({
+        this.player= new CartaJugador({
             scene: this,
             name:'Paladin',
             x:this.game.config.width/2,
             y:this.game.config.height-200,
             card:'playercard',
             image:'paladin',
+            salud:16,
             depth:1,
             ondragend:(pointer, gameObject)=>{}
         });
