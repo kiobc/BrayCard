@@ -3,7 +3,7 @@ import Principal from './Principal.js';
 const config ={
     width:640,
     height:1024,
-    backgroundColor:'#33333',
+    backgroundColor:'#33333a',
     type: Phaser.AUTO,
     parent:'phaser-game',
     scene:[Principal]
