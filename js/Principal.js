@@ -1,6 +1,7 @@
 
 import CartaGrid from './CartaGrid.js';
 import CartaJugador from './CartaJugador.js';
+import Grid from './Grid.js';
 export default class Principal extends Phaser.Scene{
     constructor(){
         super('Principal');
@@ -24,15 +25,7 @@ export default class Principal extends Phaser.Scene{
         this.load.bitmapFont('pressstart', 'assets/pressstart.png', 'assets/pressstart.fnt');
       }
       create(){
-        let cartatest = new CartaGrid({
-          scene: this,
-          name: 'Poción de salud roja',
-          x: 200,
-          y: 200,
-          card: 'card',
-          image: 'healingpotion',
-          value: 12
-        });
+        this.grid=new Grid({scene:this, columnas:3,rows:3});
         
 
         this.player= new CartaJugador({
