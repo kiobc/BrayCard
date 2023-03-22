@@ -1,44 +1,68 @@
-import ArrastraCartas from "./ArrastraCartas.js";
-export default class CartaJugador extends ArrastraCartas{
-    constructor(data){
-        let{salud}=data;
-        super(data);
-        this.textSalud= new Phaser.GameObjects.BitmapText(this.scene,0,-101,'pressstart',salud);
-        this.textMaxSalud= new Phaser.GameObjects.BitmapText(this.scene,-20,-90,'pressstart',salud,12);
-        this.textArmadura= new Phaser.GameObjects.BitmapText(this.scene,0,0,'pressstart');
-        this.spriteArmadura=new Phaser.GameObjects.Sprite(this.scene,50,-80,'armor');
-        this.textSalud.tint=0;
-        this.textMaxSalud.tint=0;
-        this.add([this.textSalud, this.textMaxSalud, this.textArmadura, this.spriteArmadura]);
-        this.salud=salud;
-        this.textMaxSalud=this.salud;
-        this.armadura=0;
+import ArrastraCarta from './ArrastraCarta.js';
 
-    }
-    set salud (newHealth){
-        this._salud=newHealth;
-        this.textSalud.text=this._salud;
-        this.textSalud.x=-44-this.textSalud.width/2;
-    }
-    get salud(){
-        return this._salud;
-    }
-    set MaxSalud(newMaxSalud){
-        this._maxSalud=newMaxSalud;
-    }
-    get maxHealth(){
-        return this._maxSalud;
-    }
-    set armadura(newArmadura){
-        this._armadura=newArmadura;
-        this.textArmadura.text= this._armadura;
-        this.textArmadura.x=46 - this.textArmadura.width/2;
-        this.textArmadura.alpha = this._armadura==0?0:1;
-        this.spriteArmadura.alpha= this._armadura==0?0:1;
+export default class CartaJugador extends ArrastraCarta {
+  constructor(data) {
+    let { salud } = data;
+    super(data);
+    this.textsalud = new Phaser.GameObjects.BitmapText(this.scene, 0, -102, 'pressstart', salud);
+    this.textMaxsalud = new Phaser.GameObjects.BitmapText(this.scene, -20, -90, 'pressstart', salud, 12);
+    this.textArmadura = new Phaser.GameObjects.BitmapText(this.scene, 0, -102, 'pressstart');
+    this.spriteArmadura = new Phaser.GameObjects.Sprite(this.scene, 50, -80, 'armor');
+    this.textsalud.tint = 0;
+    this.textMaxsalud.tint = 0;
+    this.add([this.textsalud, this.textMaxsalud, this.spriteArmadura, this.textArmadura]);
+    this.salud = salud;
+    this.maxsalud = salud;
+    this.armor = 0;
+  }
 
-    }
+  set salud(newsalud) {
+    this._salud = newsalud;
+    this.textsalud.text = this._salud;
+    this.textsalud.x = -44 - this.textsalud.width / 2;
+  }
 
-    get armadura(){
-        return this._armadura;
+  get salud() {
+    return this._salud;
+  }
+
+  set maxsalud(newMaxsalud) {
+    this._maxsalud = newMaxsalud;
+  }
+
+  get maxsalud() {
+    return this._maxsalud;
+  }
+
+  set armor(newArmor) {
+    this._armor = newArmor;
+    this.textArmadura.text = this._armor;
+    this.textArmadura.x = 47 - this.textArmadura.width / 2;
+    this.textArmadura.alpha = this._armor == 0 ? 0 : 1;
+    this.spriteArmadura.alpha = this._armor == 0 ? 0 : 1;
+  }
+
+  get armor() {
+    return this._armor;
+  }
+
+  attack(ataqueValor) {
+    if (ataqueValor <= this.armor) {
+      this.armor = this.armor - ataqueValor;
+    } else {
+      this.salud = this.salud - (ataqueValor - this.armor);
+      this.armor = 0;
     }
+    if (this.salud <= 0) this.dead = true;
+  }
+
+  set dead(dead) {
+    this.salud = '0';
+    this.cartanombre = 'Muerto';
+    this.draggable = false;
+    this.deadAnimation();
+  }
+  get dead() {
+    return this._cartanombre == 'Muerto';
+  }
 }

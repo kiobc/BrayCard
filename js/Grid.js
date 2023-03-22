@@ -1,37 +1,59 @@
-import CartaGrid from "./CartaGrid.js";
-import CartaTipo from "./CartaTipo.js";
+import CartaGrid from './CartaGrid.js';
+import cartatipo from './cartatipo.js';
 
-export default class Grid{
-    constructor(data){
-        let{scene,columnas,rows}=data;
-        this.xOffset=120;
-        this.yOffset=280;
-        this.yStart=scene.game.config.height/2;
-        this.columnas=columnas;
-        this.rows=rows;
-        this.scene=scene;
-        this.cartas=[];
-        this.addCarta(0);
+export default class Grid {
+  constructor(data) {
+    let { scene, columnas, filas } = data;
+    this.xOffset = 120;
+    this.yOffset = 280;
+    this.yStart = scene.game.config.height / 2;
+    this.columnas = columnas;
+    this.filas = filas;
+    this.scene = scene;
+    this.cards = [];
+    this.addCards(0);
+  }
 
+  addCards(startIndex) {
+    for (let index = startIndex; index < this.columnas * this.filas; index++) {
+      const cardtype = cartatipo[Math.floor(Math.random() * cartatipo.length)];
+      let card = new CartaGrid({
+        scene: this.scene,
+        x: this.xOffset + (this.scene.game.config.width / 2 - this.xOffset) * (index % this.columnas),
+        y: this.yStart - this.yOffset * Math.floor(index / this.columnas),
+        card: 'card',
+        image: cardtype.image,
+        value: cardtype.value,
+        name: cardtype.name,
+        type: cardtype.type
+      });
+      card.depth = 0;
+      this.cards.push(card);
     }
-    addCarta(startIndex){
-        for (let index = startIndex; index < this.columnas*this.rows; index++) {
-            const cartatipo=CartaTipo[Math.floor(Math.random()*CartaTipo.length)];
-            let card= new CartaGrid({
-                scene:this.scene,
-                x:this.xOffset+(this.scene.game.config.width/2- this.xOffset)*(index % this.columnas),
-                y: this.yStart-this.yOffset*Math.floor(index/this.columnas),
-                card:'card',
-                image: cartatipo.image,
-                value: cartatipo.value,
-                name:cartatipo.name,
-                type:cartatipo.type
+  }
 
-            });
-            card.depth=0;
-            this.cartas.push(card);
-            
-        }
-    }
+  addBackRow() {
+    if (this.cards.length >= this.columnas * this.filas) return;
+    this.addCards(6);
+  }
 
+  fadeFrontRow() {
+    setTimeout(() => {
+      this.cards.splice(0, 3).forEach(card => card.destroy());
+      this.cards.forEach(card => {
+        this.scene.tweens.add({
+          targets: card,
+          duration: 400,
+          y: card.y + this.yOffset,
+          onComplete: () => this.addBackRow()
+        });
+      });
+    }, 1000);
+
+    this.cards.slice(0, 3).forEach(card => {
+      if (!card.selected) {
+        this.scene.tweens.add({ targets: card, alpha: 0, duration: 200 });
+      }
+    });
+  }
 }
