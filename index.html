@@ -1,22 +1,25 @@
 <!DOCTYPE html>
-<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/phaser/3.22.0/phaser-arcade-physics.min.js"></script>
     <title>BrayCard</title>
     <style>
       #phaser-game {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
+        width: 100%;
+        height: calc(100% - 40px); /* ajustar según la altura del navegador móvil */
+        margin-top: 40px; /* ajustar según la altura del navegador móvil */
+      }
+      @media only screen and (max-width: 480px) {
+        #phaser-game {
+          height: calc(100% - 80px); /* ajustar según la altura del navegador móvil */
+          margin-top: 80px; /* ajustar según la altura del navegador móvil */
+        }
       }
     </style>
   </head>
   <body>
-    
     <div id="phaser-game"></div>
     <script type="module" src="js/juegocarta.js"></script>
   </body>
